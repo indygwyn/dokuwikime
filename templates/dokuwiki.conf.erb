@@ -1,0 +1,30 @@
+Alias      /dokuwiki                    /opt/dokuwiki/
+<Directory /opt/dokuwiki/>
+	Options +FollowSymLinks
+	require all granted
+	#Allow from localhost 127.0.0.1 ::1
+	<IfModule mod_rewrite.c>
+   	# Uncomment to implement server-side URL rewriting
+   	# (cf. <http://www.dokuwiki.org/config:userewrite>).
+   	# Do *not* mix that with multisite!
+   	RewriteEngine on
+   	RewriteBase /dokuwiki
+   	RewriteRule ^lib                      - [L]
+   	RewriteRule ^doku.php                 - [L]
+   	RewriteRule ^feed.php                 - [L]
+   	RewriteRule ^install.php              - [L]                
+   	RewriteRule ^_media/(.*)              lib/exe/fetch.php?media=$1  [QSA,L]
+   	RewriteRule ^_detail/(.*)             lib/exe/detail.php?media=$1 [QSA,L]
+   	RewriteRule ^_export/([^/]+)/(.*)     doku.php?do=export_$1&id=$2 [QSA,L]
+   	RewriteRule ^$                        doku.php  [L]
+   	RewriteRule (.*)                      doku.php?id=$1  [QSA,L]
+	</IfModule>
+</Directory>
+
+<Directory /opt/dokuwiki/bin>
+	Require all denied
+</Directory>
+
+<Directory /opt/dokuwiki/data>
+	Require all denied
+</Directory>

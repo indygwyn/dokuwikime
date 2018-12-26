@@ -1,4 +1,4 @@
 # dokuwikime
 
-TODO: Enter the cookbook description here.
+This is a chef cookbook to install dokuwiki on centos
 

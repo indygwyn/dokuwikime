@@ -9,6 +9,10 @@ describe package('centos-release-scl') do
   it { should be_installed }
 end
 
+describe yum.repo('centos-sclo-rh') do 
+  it { should be_enabled }
+end
+
 describe package('httpd24') do
   it { should be_installed }
 end
@@ -37,10 +41,18 @@ describe service('httpd24-httpd') do
   it { should be_running }
 end
 
+describe file('/opt/dokuwiki/data/pages/start.txt') do
+  it { should exist }
+  its('owner') { should eq 'apache' }
+  its('mode') { should cmp '0644' }
+end
+
 describe port(80) do
   it { should be_listening }
 end
 
-describe command('curl http://localhost/dokuwiki/') do
-  its('stdout') { should match /dokuwiki/ }
+describe http('http://localhost/dokuwiki/') do
+  its('status') { should cmp 200 }
+  its('body') { should match /start\.txt/ }
+  its('headers.Content-Type') { should match /text\/html/ }
 end

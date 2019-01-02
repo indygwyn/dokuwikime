@@ -10,10 +10,24 @@ verifier:
   name: inspec
 
 platforms:
+  - name: ubuntu-16-04
+    driver_config:
+      box: bento/ubuntu-16.04
+      network:
+        - ["forwarded_port", {guest: 80, host: 80}]
+  - name: ubuntu-18-04
+    driver_config:
+      box: bento/ubuntu-18.04
+      network:
+        - ["forwarded_port", {guest: 80, host: 81}]
+  - name: centos-6
+    driver_config:
+      network:
+        - ["forwarded_port", {guest: 80, host: 82}]
   - name: centos-7
     driver_config:
       network:
-        - ["forwarded_port", {guest: 80, host: 80}]
+        - ["forwarded_port", {guest: 80, host: 83}]
 
 suites:
   - name: default

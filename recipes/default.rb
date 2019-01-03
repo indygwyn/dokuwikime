@@ -17,7 +17,7 @@ when 'centos'
   when '7'
     pkgs.concat(%w( rh-php72 rh-php72-php-cli rh-php72-php-fpm rh-php72-php-gd rh-php72-php-mbstring rh-php72-php-xml rh-php72-php-json ))
     svcs.concat(%w( rh-php72-php-fpm ))
-  end 
+  end
 when 'ubuntu'
   pkgs = %w( apache2 php php-fpm php-gd php-mbstring php-xml )
   svcs = %w( apache2 )
@@ -64,13 +64,13 @@ when 'centos'
   include_recipe 'selinux_policy::install'
   # allow httpd to make network connections for updates and plugin install
   selinux_policy_boolean 'httpd_can_network_connect' do
-   value true
-   notifies :restart,'service[httpd24-httpd]'
+    value true
+    notifies :restart, 'service[httpd24-httpd]'
   end
   # allow httpd to use sendmail
   selinux_policy_boolean 'httpd_can_sendmail' do
     value true
-    notifies :restart,'service[httpd24-httpd]'
+    notifies :restart, 'service[httpd24-httpd]'
   end
   # set dokuwiki files to http rw label
   selinux_policy_fcontext '/opt/dokuwiki(/.*)?' do
@@ -79,12 +79,12 @@ when 'centos'
 when 'ubuntu'
   # Enable Apache actions module
   execute 'actions' do
-    command "/usr/sbin/a2enmod actions"
-  end 
+    command '/usr/sbin/a2enmod actions'
+  end
   # Enable Apache alias module
-  execute 'alias' do 
-    command "/usr/sbin/a2enmod alias"
-  end 
+  execute 'alias' do
+    command '/usr/sbin/a2enmod alias'
+  end
   # Apache config to enable dokuwiki at /dokuwiki/
   template '/etc/apache2/conf-available/dokuwiki.conf' do
     source 'dokuwiki.conf.erb'
@@ -96,7 +96,7 @@ when 'ubuntu'
   execute 'dokuwiki' do
     command '/usr/sbin/a2enconf dokuwiki'
     notifies :restart, 'service[apache2]'
-  end 
+  end
   case node['platform_version'].split('.')[0]
   when '16'
     # install apache php and some php modules
@@ -107,18 +107,18 @@ when 'ubuntu'
     execute 'proxy_fcgi' do
       command '/usr/sbin/a2enmod proxy_fcgi'
       notifies :restart, 'service[apache2]'
-    end 
+    end
     # enable php7.0-fpm apache config
     execute 'php7.0-fpm' do
       command '/usr/sbin/a2enconf php7.0-fpm'
       notifies :restart, 'service[apache2]'
-    end 
+    end
   when '18'
     # enable php7.2-fpm apache config
     execute 'php7.2-fpm' do
       command '/usr/sbin/a2enconf php7.2-fpm'
       notifies :restart, 'service[apache2]'
-    end 
+    end
   end
   # Meta refresh to /dokuwiki/
   template '/var/www/html/index.html' do
@@ -127,7 +127,7 @@ when 'ubuntu'
     owner 'root'
     group 'root'
   end
-end 
+end
 # Use ark to download and install the dokuwiki stable release at /opt/dokuwiki
 ark 'dokuwiki' do
   url 'https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz'
@@ -147,4 +147,4 @@ svcs.each do |svc|
   service svc do
     action [ :enable, :start ]
   end
-end 
+end
